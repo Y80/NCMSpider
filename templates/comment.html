@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+	<head>
+		<!--取消浏览器的自动缩放，禁止用户进行缩放-->
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+		<title>云音乐虫虫</title>
+		<link rel="icon" href="/static/pic/favicon.ico" type="image/x-icon" />
+		<script src="https://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="../static/search.css" type="text/css">
+
+	</head>
+
+	<body>
+
+		<nav class="nav">
+			<div class="media">
+				<div class="media-left media-middle">
+					<a href="/">
+						<img class="brand center-block img-rounded" alt="Brand" src="../static/pic/CloudMusic.jpg">
+					</a>
+				</div>
+				<div class="media-body well well-sm nav-title-container">
+					<div class=" nav-title">网易云音乐爬虫系统</div>
+				</div>
+			</div>
+		</nav>
+
+		<div class="container">
+			<div class="row song-info">
+				<div class="col-sm-5 col-xs-5">
+					<img class="img-rounded blurPic" src="{{ song_info_data.blurPicUrl }}" />
+				</div>
+				<div class="col-sm-7 col-xs-7">
+					<div>
+						<div class="info-item">
+							<span><span class="glyphicon glyphicon-cd"></span> <span class="hidden-xs">歌曲名称</span></span>
+							<span class="pull-right">{{ song_info_data.name}}</span>
+						</div>
+						<div class="info-item">
+							<span><span class="glyphicon glyphicon-user"></span> <span class="hidden-xs">歌手</span></span>
+							<span class="pull-right">{{ song_info_data.singer }}</span>
+						</div>
+						<div class="info-item">
+							<span><span class="glyphicon glyphicon-hourglass"></span> <span class="hidden-xs">歌曲时长</span></span>
+							<span class="pull-right">{{ song_info_data.duration }}</span>
+						</div>
+						<div class="info-item">
+							<span><span class="glyphicon glyphicon-comment"></span> <span class="hidden-xs">评论数量</span></span>
+							<span class="pull-right">{{ comment_data.total }}</span>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<hr />
+
+			<div class="panel panel-default panel-danger">
+				<div class="panel-heading">
+					<h3 class="panel-title"><span class="glyphicon glyphicon-fire"></span> 热门评论</h3>
+				</div>
+				<ul class="list-group">
+					{% for item in comment_data.hotComments %}
+					<li class="list-group-item">
+						<div class="media">
+							<div class="media-left">
+								<img class="img-circle avatar" src={{ item.avatarUrl }} />
+							</div>
+							<div class="media-body">
+								<span class="media-heading nickname">{{ item.nickname }}</span>
+								<span class="comment-time badge hidden-xs">{{ item.time }}</span>
+								<span class="pull-right">
+									<span class="badge like-count"><span class="glyphicon glyphicon-thumbs-up"></span> {{ item.likedCount}}</span>
+								</span>
+								<div class="comment-content">
+									{{ item.content }}
+								</div>
+							</div>
+						</div>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+
+			<div class="panel panel-default panel-danger">
+				<div class="panel-heading">
+					<h3 class="panel-title"><span class="glyphicon glyphicon-plane"></span> 最新评论</h3>
+				</div>
+				<ul class="list-group">
+					{% for item in comment_data.comments %}
+					<li class="list-group-item">
+						<div class="media">
+							<div class="media-left">
+								<img class="img-circle avatar" src={{ item.avatarUrl }} />
+							</div>
+							<div class="media-body">
+								<span class="media-heading nickname">{{ item.nickname }}</span>
+								<span class="comment-time badge hidden-xs">{{ item.time }}</span>
+								<span class="pull-right"><span class="badge like-count"><span class="glyphicon glyphicon-thumbs-up"></span> {{ item.likedCount}}</span>
+								</span>
+								<div class="comment-content">
+									{{ item.content }}
+								</div>
+							</div>
+						</div>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+
+			<script>
+				var xhr = null
+				var offset = 20
+				var id = null
+
+				function useXhr() {
+					$(".more").css("border", "none")
+					$("#more_text").css("display", "none")
+					$("#loading_icon").css("display", "inline-block")
+					$("#loading_icon").css("animation", "rotate 1s infinite linear")
+
+					if(xhr == null) {
+						xhr = new XMLHttpRequest();
+						xhr.onreadystatechange = readyStateChanged;
+					}
+					if(id == null){
+						id = $(".more").attr("data-songId")
+					}
+					xhr.open("GET", "/api/comments?offset=" + offset + "&song_id=" + id, true);
+					xhr.send()
+					offset += 20
+				}
+
+				function readyStateChanged() {
+					if(xhr.readyState == 4 && xhr.status == 200) {
+						let data = JSON.parse(xhr.response)
+						data = data.comments_data.comments
+						for(let item_index in data) {
+							appendComment(data[item_index])
+						}
+						$(".more").css("border", "solid 1px rgba(0, 0, 0, .3)")
+						$("#more_text").css("display", "inline")
+						$("#loading_icon").css("display", "none")
+						$("#loading_icon").css("animation", "")
+					}
+				}
+
+				function appendComment(data) {
+					var ul = document.getElementsByTagName('ul')[1]
+					var li = eleCreater("li", "list-group-item", null, ul)
+					var div_media = eleCreater("div", "media", null, li)
+					var div_left = eleCreater("div", "media-left", null, div_media)
+
+					var img = document.createElement("img")
+					img.setAttribute("class", "img-circle avatar")
+					img.setAttribute("src", data.avatarUrl)
+					div_left.appendChild(img)
+
+					var div_body = eleCreater("div", "media-body", null, div_media)
+					var nickname = eleCreater("span", "media-heading nickname", data.nickname, div_body)
+					var time = eleCreater("span", "comment-time badge hidden-xs", data.time, div_body)
+					var span1 = eleCreater("span", "pull-right", null, div_body)
+					var span1_1 = eleCreater("span", "badge like-count", null, span1)
+					var span1_1_1 = eleCreater("span", "glyphicon glyphicon-thumbs-up", null, span1_1)
+					var span1_1_2 = eleCreater("span", "", " " + data.likedCount, span1_1)
+
+					var content = eleCreater("div", "comment-content", data.content, div_body)
+				}
+
+				function eleCreater(tag_name, class_value, innerHTML_value, parent_node) {
+					var tag = document.createElement(tag_name)
+					tag.setAttribute("class", class_value)
+					if(innerHTML_value != null) tag.innerHTML = innerHTML_value
+					if(parent_node != null) parent_node.appendChild(tag)
+					return tag
+				}
+			</script>
+			
+			<ul class="pager">
+				<li class="more" data-songId = {{ song_id }} onclick="useXhr()">
+					<span id="loading_icon" class="glyphicon glyphicon-repeat" style="display: none;"></span>
+					<span id="more_text" >more</span>
+				</li>
+			</ul>
+
+		</div>
+	</body>
+
+</html>

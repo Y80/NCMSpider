@@ -1,0 +1,83 @@
+html {
+	height: 100%;
+}
+
+body {
+	background: #fafafa;
+	height: 100%;
+	margin: 0;
+}
+
+.nav {
+	padding: 1em 4em;
+	box-shadow: 0 .3em .3em #CCC;
+}
+
+.nav-title-container {
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+.brand {
+	max-width: 48px;
+}
+
+.nav-title {
+	letter-spacing: 1px;
+	font-size: 18px;
+}
+
+.container {
+	max-width: 680px;
+	height: 100%;
+}
+
+tr{
+	cursor: pointer;
+}
+
+.floater {
+	float: left;
+	height: 50%;
+	margin-bottom: -180px;
+}
+
+.search-form {
+	padding: 0 1em;
+	max-width: 680px;
+	clear: both;
+	height: 240px;
+	position: relative;
+}
+
+.input-emoji{
+	font-size: 1.5em;
+	cursor: pointer;
+	background: beige;
+}
+
+.form-control:focus {
+	border-color: rgb(255, 30, 30);
+	outline: 0;
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(255, 30, 30, .6);
+}
+.modal-header{
+	border: none;
+}
+
+.footer .container {
+	background: #fafafa;
+}
+
+
+@keyframes rotate {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@icon-font-path: "pic/favicon.ico"
+
+@body-bg:    #f0f;

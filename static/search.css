@@ -1,0 +1,110 @@
+.nav {
+	padding: 1em 4em;
+	box-shadow: 0 .3em .3em #CCC;
+}
+
+.nav-title-container {
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+}
+
+.brand {
+	max-width: 48px;
+}
+
+.nav-title {
+	letter-spacing: 1px;
+	font-size: 18px;
+}
+
+.container {
+	max-width: 680px;
+	padding-top: 5em;
+}
+
+.blurPic {
+	width: 100%;
+}
+
+.song-info {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.info-item {
+	font-size: 1.15em;
+	border-radius: 5px;
+	padding: 1px 10px;
+	margin: 5px;
+}
+
+.avatar {
+	width: 64px;
+}
+
+.nickname {
+	font-size: 1.2em;
+	background: linear-gradient(to left, rgba(0, 180, 255, 0.6), rgba(0, 250, 255, 1));
+	border-radius: 15px;
+	padding: 3px 10px;
+	font-weight: 600;
+	color: #fff;
+}
+
+.comment-time {
+	color: #fff;
+	background: rgba(30, 30, 30, 0.4);
+	margin-left: 2em;
+}
+
+.like-count {
+	background: rgba(255, 30, 30, 0.8);
+}
+
+.comment-content {
+	/*border-top: solid 1px rgba(200, 200, 200, 1);*/
+	padding-top: 0.5em;
+	margin-top: 0.3em;
+	letter-spacing: 1px;
+}
+
+.pager {
+	margin: 2em 0 5em 0;
+}
+
+.more {
+	letter-spacing: 1px;
+	font-size: 1.3em;
+	font-weight: 500;
+	width: 3em;
+	border: solid 1px rgba(0, 0, 0, .3);
+	border-radius: 20px;
+	padding: 8px 20px;
+	cursor: pointer;
+}
+
+#loading_icon {
+	border: none;
+	padding: 0;
+}
+
+#more_text {
+	border: none;
+}
+
+@keyframes rotate {
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@media (max-width: 640px) {
+	.avatar {
+		width: 48px;
+	}
+	.nickname, .like-count{
+		font-size: 0.8em;
+	}
+}
